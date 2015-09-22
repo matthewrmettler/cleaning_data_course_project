@@ -2,26 +2,17 @@
 ## Version 1.0
 ###Created By Matthew Mettler
 
-###Based on:
-*Human Activity Recognition Using Smartphones Dataset*
+###Based on:  
+> Human Activity Recognition Using Smartphones Dataset  
+> Jorge L. Reyes-Ortiz, Davide Anguita, Alessandro Ghio, Luca Oneto.  
+> Smartlab - Non Linear Complex Systems Laboratory  
+> DITEN - Università degli Studi di Genova.  
+> Via Opera Pia 11A, I-16145, Genoa, Italy.  
+> activityrecognition@smartlab.ws  
+> www.smartlab.ws  
 
-*Jorge L. Reyes-Ortiz, Davide Anguita, Alessandro Ghio, Luca Oneto.*
-
-*Smartlab - Non Linear Complex Systems Laboratory*
-
-*DITEN - Università degli Studi di Genova.*
-
-*Via Opera Pia 11A, I-16145, Genoa, Italy.*
-
-*activityrecognition@smartlab.ws*
-
-*www.smartlab.ws*
-
-
-[Explanation of the original data set](http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones)
-
-[Original data set (.zip)](https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip)
-
+[Explanation of the original data set](http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones)  
+[Original data set (.zip)](https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip)  
 
 # Included Files
 - 'Readme.md'
