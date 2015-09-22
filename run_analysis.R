@@ -24,32 +24,36 @@
 ##  https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip
 ###############################################################################
 
+library(reshape2)
+
 #################################################################
 # 1. Merge the training and the test sets to create one data set 
 #################################################################
 
-#The four files we need
+#The six files we need to build the large data set
 test_data_set <- read.table("./UCI HAR Dataset/test/X_test.txt")
 test_data_labels <- read.table("./UCI HAR Dataset/test/y_test.txt")
+test_data_subject <- read.table("./UCI HAR Dataset/test/subject_test.txt")
 train_data_set <- read.table("./UCI HAR Dataset/train/X_train.txt")
 train_data_labels <- read.table("./UCI HAR Dataset/train/y_train.txt")
+train_data_subject <- read.table("./UCI HAR Dataset/train/subject_train.txt")
 
-#Apply labels
-test_data_set = cbind(test_data_set, test_data_labels)
-train_data_set = cbind(train_data_set, train_data_labels)
+#Apply labels and subjects
+test_data_set = cbind(test_data_set, cbind(test_data_labels, test_data_subject))
+train_data_set = cbind(train_data_set, cbind(train_data_labels, train_data_subject))
 
 #merge the data
 
-data = rbind(test_data_set, train_data_set)
+raw_data = rbind(test_data_set, train_data_set)
 
 #################################################################
 # 2. Extract only the measurements on the mean and standard deviation for each measurement.
+# 4. Appropriately labels the data set with descriptive variable names.
 #################################################################
 
 # Load features.txt
 # First column is the index, the second is the feature name
 features <- read.table("./UCI HAR Dataset/features.txt")
-
 
 # Use grep to get the mean and std indices from the features.txt file
 filtered_mean <- apply(features, 1, function(x) { any(grep("-mean()", x)) } )
@@ -59,12 +63,33 @@ std_indices <- features[,1][filtered_std]
 
 indices <- sort(c(mean_indices, std_indices))
 
-data_extracted = data[indices]
-names(data_extracted) <- features[,2][indices]
+# Create and name new data frame
+data = raw_data[indices]
+names(data) <- features[,2][indices]
+
+data = cbind(data, raw_data[562])
+data = cbind(data, raw_data[563])
+names(data)[80] <- "Activity"
+names(data)[81] <- "Subject"
 
 #################################################################
 # 3. Use descriptive activity names to name the activities in the data set.
 #################################################################
 
-data_extracted = cbind(data_extracted, data[562])
-names(data_extracted)[80] <- "Activity"
+data$Activity[data$Activity == 1] <- "WALKING"
+data$Activity[data$Activity == 2] <- "WALKING_UPSTAIRS"
+data$Activity[data$Activity == 3] <- "WALKING_DOWNSTAIRS"
+data$Activity[data$Activity == 4] <- "SITTING"
+data$Activity[data$Activity == 5] <- "STANDING"
+data$Activity[data$Activity == 6] <- "LAYING"
+
+#################################################################
+# Create a second, independent tidy data set with the average of 
+# each variable for each activity and each subject.
+#################################################################
+
+Molten <- melt(data, id.vars = c("Activity", "Subject"))
+result <- dcast(Subject + Activity ~ variable, data = Molten, fun = mean)
+write.table(result, "clean_data.txt", row.name=FALSE)
+
+print(cat(names(data), sep="\n"))
